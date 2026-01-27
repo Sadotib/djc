@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Event Map 3D - Interactive Venue Explorer</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+        
+        #canvas-container {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+        }
+        
+        #info-panel {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 16px;
+            max-width: 280px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+        }
+        
+        #controls-hint {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 14px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+        }
+        
+        #qr-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        #qr-modal.active {
+            display: flex;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 8px 0;
+            font-size: 14px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+        
+        #location-popup {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.85);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            pointer-events: none;
+            display: none;
+            z-index: 200;
+            font-size: 14px;
+            max-width: 200px;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        @media (max-width: 640px) {
+            #info-panel {
+                top: auto;
+                bottom: 80px;
+                left: 10px;
+                right: 10px;
+                max-width: none;
+                padding: 15px;
+            }
+            
+            #controls-hint {
+                bottom: 10px;
+                font-size: 12px;
+                padding: 8px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container"></div>
+    
+    <!-- Info Panel -->
+    <div id="info-panel">
+        <h1 class="text-xl font-bold text-gray-800 mb-2">🎪 TechFest 2024</h1>
+        <p class="text-gray-600 text-sm mb-4">Interactive 3D Event Map</p>
+        
+        <div class="border-t pt-3 mb-3">
+            <h3 class="font-semibold text-gray-700 mb-2">Legend</h3>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #e74c3c;"></div>
+                <span>Main Stage</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #3498db;"></div>
+                <span>Exhibition Booths</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #2ecc71;"></div>
+                <span>Food Court</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #9b59b6;"></div>
+                <span>Workshop Zones</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #f39c12;"></div>
+                <span>Registration</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #1abc9c;"></div>
+                <span>Restrooms</span>
+            </div>
+        </div>
+        
+        <button class="btn w-full" onclick="showQRCode()">
+            📱 Show QR Code
+        </button>
+    </div>
+    
+    <!-- Controls Hint -->
+    <div id="controls-hint">
+        🖱️ <strong>Rotate:</strong> Drag | <strong>Zoom:</strong> Scroll | <strong>Pan:</strong> Right-click drag
+    </div>
+    
+    <!-- Location Popup -->
+    <div id="location-popup"></div>
+    
+    <!-- QR Code Modal -->
+    <div id="qr-modal" onclick="hideQRCode()">
+        <div class="bg-white p-8 rounded-2xl text-center" onclick="event.stopPropagation()">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">Scan to View Map</h2>
+            <div id="qr-code" class="mb-4"></div>
+            <p class="text-gray-600 text-sm mb-4">Share this QR code at your event!</p>
+            <button class="btn" onclick="hideQRCode()">Close</button>
+        </div>
+    </div>
+
+    <!-- External Map Script -->
+    <script src="map.js"></script>
+</body>
+</html>
