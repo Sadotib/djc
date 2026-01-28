@@ -104,38 +104,6 @@ const VENUE_CONFIG = {
             name: 'Main Stage',
             description: 'Live performances & keynotes'
         },
-        {
-            type: 'building',
-            position: { x: 50, z: 90 },
-            size: { width: 90, height: 20, depth: 20 },
-            color: 0xe74c3c,
-            name: 'Hostel V Tragedy',
-            description: 'Live performances & keynotes'
-        },
-        {
-            type: 'building',
-            position: { x: -5, z: 115 },
-            size: { width: 20, height: 20, depth: 70 },
-            color: 0xe74c3c,
-            name: 'Hostel V RockFord',
-            description: 'Live performances & keynotes'
-        },
-        {
-            type: 'building',
-            position: { x: 95, z: 115 },
-            size: { width: 20, height: 20, depth: 70 },
-            color: 0xe74c3c,
-            name: 'Hostel V Serious',
-            description: 'Live performances & keynotes'
-        },
-        //    {
-        //     type: 'building',
-        //     position: { x: -5, z: 135 },
-        //     size: { width: 90, height: 20, depth: 70 },
-        //     color: 0xe74c3c,
-        //     name: 'Hostel V RockFord',
-        //     description: 'Live performances & keynotes'
-        // },
 
         // ══════════════════════════════════════════════════════════════════════
         // EXHIBITION BOOTHS (Blue) - Auto-generated grid
@@ -188,14 +156,6 @@ const VENUE_CONFIG = {
         //     namePrefix: 'Food Stall',
         //     description: 'Various cuisines'
         // }),
-        {
-            type: 'building',
-            position: { x: 15, z: 42 },
-            size: { width: 4, height: 4, depth: 4 },
-            color: 0x2ecc71,
-            name: 'Selfie Point',
-            description: 'Photo Sessions'
-        },
 
         // ══════════════════════════════════════════════════════════════════════
         // WORKSHOP ZONES (Purple)
@@ -236,12 +196,12 @@ const VENUE_CONFIG = {
             name: 'Resting Area',
             description: 'Info desk'
         },
-        {
-            type: 'arch',
-            position: { x: 0, z: 45 },
-            color: 0xf39c12,
-            signColor: 0xe74c3c
-        },
+        // {
+        //     type: 'arch',
+        //     position: { x: 0, z: 28 },
+        //     color: 0xf39c12,
+        //     signColor: 0xe74c3c
+        // },
 
         // ══════════════════════════════════════════════════════════════════════
         // RESTROOMS (Teal)
@@ -306,9 +266,9 @@ const VENUE_CONFIG = {
         
         // Paths - Connect two points with a walkway
         paths: [
-            { from: { x: -55, z: 50 }, to: { x: 45, z: 50 }, width: 10 },
-            { from: { x: -50, z: 45 }, to: { x: -50, z: -45 }, width: 10 },
-            { from: { x: -5, z: 140 }, to: { x: 85, z: 140 }, width: 6 }
+            { from: { x: -45, z: 45 }, to: { x: 45, z: 45 }, width: 10 },
+            // { from: { x: -15, z: 0 }, to: { x: 10, z: 0 }, width: 3 },
+            // { from: { x: 15, z: 0 }, to: { x: 15, z: 10 }, width: 3 }
         ]
     }
 };

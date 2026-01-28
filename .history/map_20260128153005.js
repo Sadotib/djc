@@ -308,7 +308,7 @@ const VENUE_CONFIG = {
         paths: [
             { from: { x: -55, z: 50 }, to: { x: 45, z: 50 }, width: 10 },
             { from: { x: -50, z: 45 }, to: { x: -50, z: -45 }, width: 10 },
-            { from: { x: -5, z: 140 }, to: { x: 85, z: 140 }, width: 6 }
+            { from: { x: -5, z: 150 }, to: { x: 85, z: 150 }, width: 6 }
         ]
     }
 };

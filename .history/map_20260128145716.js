@@ -18,7 +18,7 @@ const VENUE_CONFIG = {
     scene: {
         backgroundColor: 0x87CEEB,    // Sky blue background
         groundColor: 0x5d4e37,        // Brown earth color
-        groundSize: 500,              // Size of the ground (increase for larger venue)
+        groundSize: 100,              // Size of the ground (increase for larger venue)
         gridDivisions: 50,            // Grid lines on ground
         showGrid: false               // Set to false to hide grid lines
     },
@@ -30,7 +30,7 @@ const VENUE_CONFIG = {
         fov: 60,                              // Field of view
         position: { x: 40, y: 50, z: 40 },    // Initial camera position
         minDistance: 15,                       // Closest zoom distance
-        maxDistance: 200                       // Farthest zoom distance
+        maxDistance: 120                       // Farthest zoom distance
     },
 
     // ┌────────────────────────────────────────────────────────────────────────┐
@@ -53,28 +53,28 @@ const VENUE_CONFIG = {
         },
         
         // Decorative pond
-        // {
-        //     type: 'water',
-        //     position: { x: -30, z: -25 },
-        //     size: { width: 15, depth: 12 },
-        //     name: 'Reflection Pond'
-        // },
+        {
+            type: 'water',
+            position: { x: -30, z: -25 },
+            size: { width: 15, depth: 12 },
+            name: 'Reflection Pond'
+        },
         
         // Stone plaza near entrance
-        // {
-        //     type: 'stone',
-        //     position: { x: 0, z: 25 },
-        //     size: { width: 20, depth: 10 },
-        //     name: 'Main Plaza'
-        // },
+        {
+            type: 'stone',
+            position: { x: 0, z: 25 },
+            size: { width: 20, depth: 10 },
+            name: 'Main Plaza'
+        },
         
         // Sand area
-        // {
-        //     type: 'sand',
-        //     position: { x: 30, z: -25 },
-        //     size: { width: 12, depth: 12 },
-        //     name: 'Beach Zone'
-        // }
+        {
+            type: 'sand',
+            position: { x: 30, z: -25 },
+            size: { width: 12, depth: 12 },
+            name: 'Beach Zone'
+        }
     ],
 
     // ┌────────────────────────────────────────────────────────────────────────┐
@@ -98,147 +98,91 @@ const VENUE_CONFIG = {
         // ══════════════════════════════════════════════════════════════════════
         {
             type: 'building',
-            position: { x: 0, z: 0 },
-            size: { width: 30, height: 8, depth: 50 },
+            position: { x: 15, z: 15 },
+            size: { width: 12, height: 8, depth: 10 },
             color: 0xe74c3c,
             name: 'Main Stage',
             description: 'Live performances & keynotes'
         },
-        {
-            type: 'building',
-            position: { x: 50, z: 90 },
-            size: { width: 90, height: 20, depth: 20 },
-            color: 0xe74c3c,
-            name: 'Hostel V Tragedy',
-            description: 'Live performances & keynotes'
-        },
-        {
-            type: 'building',
-            position: { x: -5, z: 115 },
-            size: { width: 20, height: 20, depth: 70 },
-            color: 0xe74c3c,
-            name: 'Hostel V RockFord',
-            description: 'Live performances & keynotes'
-        },
-        {
-            type: 'building',
-            position: { x: 95, z: 115 },
-            size: { width: 20, height: 20, depth: 70 },
-            color: 0xe74c3c,
-            name: 'Hostel V Serious',
-            description: 'Live performances & keynotes'
-        },
-        //    {
-        //     type: 'building',
-        //     position: { x: -5, z: 135 },
-        //     size: { width: 90, height: 20, depth: 70 },
-        //     color: 0xe74c3c,
-        //     name: 'Hostel V RockFord',
-        //     description: 'Live performances & keynotes'
-        // },
 
         // ══════════════════════════════════════════════════════════════════════
         // EXHIBITION BOOTHS (Blue) - Auto-generated grid
         // Creates 6 booths in a 2x3 grid pattern
         // ══════════════════════════════════════════════════════════════════════
-        // ...generateGrid({
-        //     type: 'building',
-        //     basePosition: { x: 5, z: -15 },
-        //     size: { width: 5, height: 4, depth: 6 },
-        //     color: 0x3498db,
-        //     rows: 2,
-        //     cols: 3,
-        //     spacing: { x: 7, z: 8 },
-        //     namePrefix: 'Booth',
-        //     description: 'Tech exhibitions & demos'
-        // }),
-        {
+        ...generateGrid({
             type: 'building',
-            position: { x: -25, z: 35 },
-            size: { width: 8, height: 4, depth: 8 },
-            color: 0xe74c3c,
-            name: 'Shradhanjali',
-            description: 'Memories'
-        },
+            basePosition: { x: 5, z: -15 },
+            size: { width: 5, height: 4, depth: 6 },
+            color: 0x3498db,
+            rows: 2,
+            cols: 3,
+            spacing: { x: 7, z: 8 },
+            namePrefix: 'Booth',
+            description: 'Tech exhibitions & demos'
+        }),
 
         // ══════════════════════════════════════════════════════════════════════
         // FOOD COURT (Green)
         // ══════════════════════════════════════════════════════════════════════
-        // {
-        //     type: 'building',
-        //     position: { x: -15, z: 10 },
-        //     size: { width: 15, height: 5, depth: 12 },
-        //     color: 0x2ecc71,
-        //     name: 'Food Court',
-        //     description: 'Refreshments & dining area'
-        // },
+        {
+            type: 'building',
+            position: { x: -15, z: 10 },
+            size: { width: 15, height: 5, depth: 12 },
+            color: 0x2ecc71,
+            name: 'Food Court',
+            description: 'Refreshments & dining area'
+        },
 
         // ══════════════════════════════════════════════════════════════════════
         // FOOD STALLS (Dark Green) - Auto-generated row
         // Creates 3 stalls in a horizontal line
         // ══════════════════════════════════════════════════════════════════════
-        // ...generateRow({
-        //     type: 'building',
-        //     basePosition: { x: -12, z: 8 },
-        //     size: { width: 3, height: 3, depth: 3 },
-        //     color: 0x27ae60,
-        //     count: 3,
-        //     spacing: 5,
-        //     direction: 'x',    // 'x' = horizontal, 'z' = vertical
-        //     namePrefix: 'Food Stall',
-        //     description: 'Various cuisines'
-        // }),
-        {
+        ...generateRow({
             type: 'building',
-            position: { x: 15, z: 42 },
-            size: { width: 4, height: 4, depth: 4 },
-            color: 0x2ecc71,
-            name: 'Selfie Point',
-            description: 'Photo Sessions'
-        },
+            basePosition: { x: -12, z: 8 },
+            size: { width: 3, height: 3, depth: 3 },
+            color: 0x27ae60,
+            count: 3,
+            spacing: 5,
+            direction: 'x',    // 'x' = horizontal, 'z' = vertical
+            namePrefix: 'Food Stall',
+            description: 'Various cuisines'
+        }),
 
         // ══════════════════════════════════════════════════════════════════════
         // WORKSHOP ZONES (Purple)
         // ══════════════════════════════════════════════════════════════════════
-        // {
-        //     type: 'building',
-        //     position: { x: 10, z: 10 },
-        //     size: { width: 10, height: 5, depth: 8 },
-        //     color: 0x9b59b6,
-        //     name: 'Workshop Zone A',
-        //     description: 'Hands-on sessions'
-        // },
-        // {
-        //     type: 'building',
-        //     position: { x: 22, z: 10 },
-        //     size: { width: 8, height: 5, depth: 8 },
-        //     color: 0x8e44ad,
-        //     name: 'Workshop Zone B',
-        //     description: 'Technical workshops'
-        // },
+        {
+            type: 'building',
+            position: { x: 10, z: 10 },
+            size: { width: 10, height: 5, depth: 8 },
+            color: 0x9b59b6,
+            name: 'Workshop Zone A',
+            description: 'Hands-on sessions'
+        },
+        {
+            type: 'building',
+            position: { x: 22, z: 10 },
+            size: { width: 8, height: 5, depth: 8 },
+            color: 0x8e44ad,
+            name: 'Workshop Zone B',
+            description: 'Technical workshops'
+        },
 
         // ══════════════════════════════════════════════════════════════════════
         // REGISTRATION & ENTRANCE (Orange)
         // ══════════════════════════════════════════════════════════════════════
         {
             type: 'building',
-            position: { x: 25, z: 35 },
-            size: { width: 8, height: 4, depth: 8 },
+            position: { x: 0, z: 25 },
+            size: { width: 14, height: 4, depth: 6 },
             color: 0xf39c12,
             name: 'Registration',
-            description: 'Check-in '
-        },
-        {
-            type: 'building',
-            position: { x: 25, z: 25 },
-            size: { width: 8, height: 4, depth: 8 },
-            color: 0xf39c12,
-            name: 'Resting Area',
-            description: 'Info desk'
+            description: 'Check-in & info desk'
         },
         {
             type: 'arch',
-            position: { x: 0, z: 45 },
+            position: { x: 0, z: 28 },
             color: 0xf39c12,
             signColor: 0xe74c3c
         },
@@ -248,20 +192,20 @@ const VENUE_CONFIG = {
         // ══════════════════════════════════════════════════════════════════════
         {
             type: 'building',
-            position: { x: 25, z: -35 },
+            position: { x: 25, z: -10 },
             size: { width: 4, height: 3, depth: 5 },
             color: 0x1abc9c,
             name: 'Restrooms',
             description: 'Facilities'
         },
-        // {
-        //     type: 'building',
-        //     position: { x: -25, z: 0 },
-        //     size: { width: 4, height: 3, depth: 5 },
-        //     color: 0x1abc9c,
-        //     name: 'Restrooms',
-        //     description: 'Facilities'
-        // }
+        {
+            type: 'building',
+            position: { x: -25, z: 0 },
+            size: { width: 4, height: 3, depth: 5 },
+            color: 0x1abc9c,
+            name: 'Restrooms',
+            description: 'Facilities'
+        }
 
         // ══════════════════════════════════════════════════════════════════════
         // ADD YOUR CUSTOM STRUCTURES BELOW
@@ -299,16 +243,16 @@ const VENUE_CONFIG = {
         trees: [
             { x: -25, z: 15 },
             { x: -25, z: -15 },
-            // { x: 25, z: 20 },
+            { x: 25, z: 20 },
             { x: -20, z: 25 },
             { x: 20, z: -20 }
         ],
         
         // Paths - Connect two points with a walkway
         paths: [
-            { from: { x: -55, z: 50 }, to: { x: 45, z: 50 }, width: 10 },
-            { from: { x: -50, z: 45 }, to: { x: -50, z: -45 }, width: 10 },
-            { from: { x: -5, z: 140 }, to: { x: 85, z: 140 }, width: 6 }
+            { from: { x: 0, z: 25 }, to: { x: 0, z: -15 }, width: 4 },
+            { from: { x: -15, z: 0 }, to: { x: 10, z: 0 }, width: 3 },
+            { from: { x: 15, z: 0 }, to: { x: 15, z: 10 }, width: 3 }
         ]
     }
 };
