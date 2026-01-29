@@ -48,9 +48,30 @@ const VENUE_CONFIG = {
         {
             type: 'grass',
             position: { x: 0, z: 0 },
-            size: { width: 90, depth: 90 },
+            size: { width: 400, depth: 400 },
             name: 'Event Grounds'
         },
+
+        // Parking Areas
+        {
+            type: 'grass',
+            position: { x: 110, z: 0 },
+            size: { width: 90, depth: 90 },
+            name: 'Parking Area'
+        },
+        {
+            type: 'water',
+            position: { x: 55, z: 10 },
+            size: { width: 20, depth: 70 },
+            name: 'Anaconda',
+        },
+        {
+            type: 'grass',
+            position: { x: -80, z: 50 },
+            size: { width: 0, depth: 0 },
+            name: 'Parking Area'
+        },
+        
         
         // Decorative pond
         // {
@@ -108,7 +129,7 @@ const VENUE_CONFIG = {
             type: 'building',
             position: { x: 50, z: 90 },
             size: { width: 90, height: 20, depth: 20 },
-            color: 0xe74c3c,
+            color: 0xe6c317,
             name: 'Hostel V Tragedy',
             description: 'Live performances & keynotes'
         },
@@ -116,7 +137,7 @@ const VENUE_CONFIG = {
             type: 'building',
             position: { x: -5, z: 115 },
             size: { width: 20, height: 20, depth: 70 },
-            color: 0xe74c3c,
+            color: 0xe6c317,
             name: 'Hostel V RockFord',
             description: 'Live performances & keynotes'
         },
@@ -124,10 +145,75 @@ const VENUE_CONFIG = {
             type: 'building',
             position: { x: 95, z: 115 },
             size: { width: 20, height: 20, depth: 70 },
-            color: 0xe74c3c,
+            color: 0xe6c317,
             name: 'Hostel V Serious',
             description: 'Live performances & keynotes'
         },
+        {
+            type: 'building',
+            position: { x: 45, z: 155 },
+            size: { width: 40, height: 10, depth: 20 },
+            color: 0xe74c3c,
+            name: 'Hostel V Mess',
+            description: 'Food Hall'
+        },
+        // Extensions
+        {
+            type: 'building',
+            position: { x: 0, z: 154 },
+            size: { width: 10, height: 20, depth: 8 },
+            color: 0xe6c317,
+        },
+        {
+            type: 'building',
+            position: { x: 90, z: 154 },
+            size: { width: 10, height: 20, depth: 8 },
+            color: 0xe6c317,
+        },
+        //
+        {
+            type: 'building',
+            position: { x: -5, z: 168 },
+            size: { width: 20, height: 20, depth: 20 },
+            color: 0xe6c317,
+            name: 'Bathrooms',
+            description: ''
+        },
+        {
+            type: 'building',
+            position: { x: 95, z: 168 },
+            size: { width: 20, height: 20, depth: 20 },
+            color: 0xe6c317,
+            name: 'Bathrooms',
+            description: ''
+        },
+        {
+            type: 'arch',
+            position: { x: 0, z: 55 },
+            color: 0xf39c12,
+            signColor: 0xe74c3c,
+            description:'',
+            name: '1st Gate'
+        },
+        {
+            type: 'arch',
+            position: { x: 100, z: 55 },
+            color: 0xf39c12,
+            signColor: 0xe74c3c,
+            description:'',
+            name: '2nd Gate'
+        },
+        {
+            type: 'building',
+            position: { x: 45, z: 120 },
+            size: { width: 70, height: 1, depth: 30 },
+            color: 0x7CFC00,
+            name: 'Hostel V Garden',
+            description: 'Food Court'
+        },
+
+
+
         //    {
         //     type: 'building',
         //     position: { x: -5, z: 135 },
@@ -242,6 +328,12 @@ const VENUE_CONFIG = {
             color: 0xf39c12,
             signColor: 0xe74c3c
         },
+        {
+            type: 'arch',
+            position: { x: -50, z: -70 },
+            color: 0xf39c12,
+            signColor: 0xe74c3c
+        },
 
         // ══════════════════════════════════════════════════════════════════════
         // RESTROOMS (Teal)
@@ -297,18 +389,24 @@ const VENUE_CONFIG = {
     decorations: {
         // Trees - Add { x: value, z: value } to place a tree
         trees: [
-            { x: -25, z: 15 },
-            { x: -25, z: -15 },
-            // { x: 25, z: 20 },
-            { x: -20, z: 25 },
-            { x: 20, z: -20 }
+            { x: 40, z: 42 },
+            { x: -30, z: 42 },
+            { x: 25, z: 42 },
+            { x: 10, z: 42 },
+            { x: -35, z: 20 },
+            { x: -35, z: -20 },
+            { x: -10, z: 42 },
+
         ],
         
         // Paths - Connect two points with a walkway
         paths: [
-            { from: { x: -55, z: 50 }, to: { x: 45, z: 50 }, width: 10 },
-            { from: { x: -50, z: 45 }, to: { x: -50, z: -45 }, width: 10 },
-            { from: { x: -5, z: 140 }, to: { x: 85, z: 140 }, width: 6 }
+            { from: { x: -55, z: 50 }, to: { x: 170, z: 50 }, width: 10 },
+            { from: { x: -50, z: 200 }, to: { x: -50, z: -150 }, width: 10 },
+            { from: { x: -5, z: 140 }, to: { x: 85, z: 140 }, width: 6 },
+            { from: { x: 0, z: 55 }, to: { x: 0, z: 80 }, width: 5 },
+            { from: { x: 100, z: 55 }, to: { x: 100, z: 80 }, width: 5 },
+            { from: { x: -55, z: 50 }, to: { x: -100, z: 50 }, width: 10 },
         ]
     }
 };
@@ -630,7 +728,7 @@ class VenueMap {
         });
         const mesh = new THREE.Mesh(geo, mat);
         mesh.rotation.x = -Math.PI / 2;
-        mesh.position.y = -0.1; // Slightly below ground
+        mesh.position.y = 0.1; // Slightly below ground
         mesh.receiveShadow = true;
         group.add(mesh);
 
@@ -1110,7 +1208,7 @@ class VenueMap {
         const path = new THREE.Mesh(pathGeo, pathMat);
         path.rotation.x = -Math.PI / 2;
         path.rotation.z = -angle;
-        path.position.set((x1 + x2) / 2, 0.02, (z1 + z2) / 2);
+        path.position.set((x1 + x2) / 2, 0.2, (z1 + z2) / 2);
         this.scene.add(path);
 
         return path;
