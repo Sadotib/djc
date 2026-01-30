@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DJC Event - Interactive Venue Explorer</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/renderers/CSS2DRenderer.js"></script>
+    <style>
+        
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-brand">🎪 DJC Event</div>
+        
+        <!-- Desktop Navigation -->
+        <div class="nav-links">
+            <a class="nav-link" onclick="navigateTo('menu')">🍽️ DJC Menu</a>
+            <a class="nav-link" onclick="navigateTo('schedule')">📅 DJC Schedule</a>
+            <a class="nav-link active" onclick="navigateTo('venue')">🗺️ DJC Venue Map</a>
+            
+            <!-- Admin Button -->
+            <button id="admin-btn">🔐 Admin</button>
+            
+            <!-- Admin Controls (shown when logged in) -->
+            <div id="admin-controls">
+                <span class="admin-badge">✓ Admin Mode</span>
+                <button id="admin-logout-btn">Logout</button>
+            </div>
+        </div>
+        
+        <!-- Hamburger Menu Button -->
+        <div class="hamburger" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+    
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobile-menu">
+        <a class="nav-link" onclick="navigateTo('menu')">🍽️ DJC Menu</a>
+        <a class="nav-link" onclick="navigateTo('schedule')">📅 DJC Schedule</a>
+        <a class="nav-link active" onclick="navigateTo('venue')">🗺️ DJC Venue Map</a>
+        
+        <div class="mobile-admin-section">
+            <button id="admin-btn-mobile" onclick="document.getElementById('admin-btn').click()">🔐 Admin Login</button>
+        </div>
+    </div>
+    
+    <!-- Menu Section -->
+    <section id="menu-section" class="page-section">
+        <div class="p-6 max-w-4xl mx-auto">
+            <h1 class="text-3xl font-bold text-white mb-6">🍽️ DJC Menu</h1>
+            
+            <div class="content-card">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Food Court Options</h2>
+                <div class="space-y-4">
+                    <div class="border-b pb-3">
+                        <h3 class="font-semibold text-gray-700">🍕 Italian Corner</h3>
+                        <p class="text-gray-600 text-sm">Pizza, Pasta, Garlic Bread</p>
+                        <p class="text-purple-600 font-semibold">$8 - $15</p>
+                    </div>
+                    <div class="border-b pb-3">
+                        <h3 class="font-semibold text-gray-700">🍔 Burger Station</h3>
+                        <p class="text-gray-600 text-sm">Classic, Cheese, Veggie Burgers</p>
+                        <p class="text-purple-600 font-semibold">$10 - $14</p>
+                    </div>
+                    <div class="border-b pb-3">
+                        <h3 class="font-semibold text-gray-700">🍜 Asian Fusion</h3>
+                        <p class="text-gray-600 text-sm">Noodles, Fried Rice, Spring Rolls</p>
+                        <p class="text-purple-600 font-semibold">$9 - $16</p>
+                    </div>
+                    <div class="border-b pb-3">
+                        <h3 class="font-semibold text-gray-700">🥗 Fresh & Healthy</h3>
+                        <p class="text-gray-600 text-sm">Salads, Wraps, Smoothies</p>
+                        <p class="text-purple-600 font-semibold">$7 - $12</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-700">🍦 Desserts & Drinks</h3>
+                        <p class="text-gray-600 text-sm">Ice Cream, Coffee, Fresh Juices</p>
+                        <p class="text-purple-600 font-semibold">$3 - $8</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-card">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">🥤 Beverage Stands</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-blue-50 p-3 rounded-lg">
+                        <p class="font-semibold text-gray-700">☕ Coffee Bar</p>
+                        <p class="text-sm text-gray-600">Near Registration</p>
+                    </div>
+                    <div class="bg-green-50 p-3 rounded-lg">
+                        <p class="font-semibold text-gray-700">🧃 Juice Station</p>
+                        <p class="text-sm text-gray-600">Food Court</p>
+                    </div>
+                    <div class="bg-yellow-50 p-3 rounded-lg">
+                        <p class="font-semibold text-gray-700">🍺 Refreshments</p>
+                        <p class="text-sm text-gray-600">Near Main Stage</p>
+                    </div>
+                    <div class="bg-purple-50 p-3 rounded-lg">
+                        <p class="font-semibold text-gray-700">💧 Water Stations</p>
+                        <p class="text-sm text-gray-600">Throughout Venue</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Schedule Section - Dynamic Content -->
+    <section id="schedule-section" class="page-section">
+        <div class="p-6 max-w-4xl mx-auto">
+            <h1 class="text-3xl font-bold text-white mb-6">📅 DJC Schedule</h1>
+            
+            <div class="content-card">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">🎭 Main Stage</h2>
+                <div id="main-stage-events" class="space-y-2">
+                    <!-- Events will be dynamically rendered here -->
+                </div>
+            </div>
+            
+            
+    </section>
+    
+    <!-- Venue Map Section (Default Active) -->
+    <section id="venue-section" class="page-section active">
+        <div id="canvas-container"></div>
+        
+        <!-- QR Button - Top Right -->
+        <button id="qr-button" class="btn" onclick="showQRCode()">
+            📱 Share QR Code
+        </button>
+        
+        <!-- Controls Hint -->
+        <div id="controls-hint">
+            🖱️ <strong>Rotate:</strong> Drag | <strong>Zoom:</strong> Scroll | <strong>Pan:</strong> Right-click
+        </div>
+        
+        <!-- Location Popup -->
+        <div id="location-popup"></div>
+    </section>
+    
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🔐 Admin Login</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="admin-login-form">
+                <div class="form-group">
+                    <label for="admin-id">Admin ID</label>
+                    <input type="text" id="admin-id" placeholder="Enter admin ID" required>
+                </div>
+                <div class="form-group">
+                    <label for="admin-password">Password</label>
+                    <input type="password" id="admin-password" placeholder="Enter password" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-cancel modal-close">Cancel</button>
+                    <button type="submit" class="btn">Login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Add Event Modal -->
+    <div id="add-event-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>➕ Add New Event</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="add-event-form">
+                <input type="hidden" id="add-event-category">
+                <div class="form-group">
+                    <label for="add-event-time">Time</label>
+                    <input type="text" id="add-event-time" placeholder="e.g., 10:00 AM" required>
+                </div>
+                <div class="form-group">
+                    <label for="add-event-title">Event Title</label>
+                    <input type="text" id="add-event-title" placeholder="Enter event title" required>
+                </div>
+                <div class="form-group">
+                    <label for="add-event-description">Description</label>
+                    <input type="text" id="add-event-description" placeholder="Brief description">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-cancel modal-close">Cancel</button>
+                    <button type="submit" class="btn">Add Event</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Edit Event Modal -->
+    <div id="edit-event-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>✏️ Edit Event</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="edit-event-form">
+                <input type="hidden" id="edit-event-category">
+                <input type="hidden" id="edit-event-id">
+                <div class="form-group">
+                    <label for="edit-event-time">Time</label>
+                    <input type="text" id="edit-event-time" placeholder="e.g., 10:00 AM" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-event-title">Event Title</label>
+                    <input type="text" id="edit-event-title" placeholder="Enter event title" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-event-description">Description</label>
+                    <input type="text" id="edit-event-description" placeholder="Brief description">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-cancel modal-close">Cancel</button>
+                    <button type="submit" class="btn">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+
+    <!-- Navigation Script -->
+    <script src="script.js"></script>
+
+    <!-- External Scripts -->
+    <script src="map.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DJC Event - Interactive Venue Explorer</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/renderers/CSS2DRenderer.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+        
+        /* Navbar Styles */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            z-index: 500;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+        
+        .nav-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .nav-link {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            color: #4a5568;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .nav-link:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+        
+        .nav-link.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        /* Admin Button */
+        #admin-btn {
+            padding: 8px 16px;
+            background: rgba(0, 0, 0, 0.1);
+            border: 2px solid #667eea;
+            color: #667eea;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        #admin-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        /* Admin Controls */
+        #admin-controls {
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        #admin-controls .admin-badge {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        #admin-logout-btn {
+            padding: 6px 12px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        #admin-logout-btn:hover {
+            background: #dc2626;
+        }
+        
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 10px;
+            z-index: 600;
+        }
+        
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: #4a5568;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+        
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 6px);
+        }
+        
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -6px);
+        }
+        
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            flex-direction: column;
+            padding: 20px;
+            gap: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 499;
+            transform: translateY(-100%);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .mobile-menu.active {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .mobile-menu .nav-link {
+            width: 100%;
+            text-align: center;
+            padding: 15px;
+        }
+        
+        .mobile-admin-section {
+            border-top: 1px solid #e5e7eb;
+            padding-top: 15px;
+            margin-top: 5px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        /* Page Sections */
+        .page-section {
+            display: none;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow-y: auto;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            z-index: 100;
+        }
+        
+        .page-section.active {
+            display: block;
+        }
+        
+        #canvas-container {
+            width: 100%;
+            height: calc(100vh - 60px);
+            margin-top: 60px;
+            position: relative;
+        }
+        
+        #controls-hint {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 14px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+        }
+        
+        #qr-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        #qr-modal.active {
+            display: flex;
+        }
+        
+        #location-popup {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.85);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            pointer-events: none;
+            display: none;
+            z-index: 200;
+            font-size: 14px;
+            max-width: 200px;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-sm {
+            padding: 8px 14px;
+            font-size: 12px;
+        }
+        
+        /* 3D Building Labels */
+        .building-label {
+            background: rgba(0, 0, 0, 0.75);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+            pointer-events: none;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            transition: opacity 0.2s;
+        }
+        
+        .building-label .label-name {
+            display: block;
+            font-size: 12px;
+        }
+        
+        .building-label .label-desc {
+            display: block;
+            font-size: 9px;
+            opacity: 0.8;
+            font-weight: 400;
+            margin-top: 2px;
+        }
+        
+        /* Terrain Labels */
+        .terrain-label {
+            background: rgba(255, 255, 255, 0.7);
+            color: #333;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 500;
+            white-space: nowrap;
+            pointer-events: none;
+            text-align: center;
+            backdrop-filter: blur(3px);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        /* QR Button - Floating */
+        #qr-button {
+            position: absolute;
+            top: 80px;
+            right: 20px;
+            z-index: 100;
+        }
+        
+        /* Content Cards */
+        .content-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Modal Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+            transition: color 0.3s;
+        }
+        
+        .modal-close:hover {
+            color: #e74c3c;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 14px;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .form-actions .btn {
+            flex: 1;
+        }
+        
+        .btn-cancel {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+        
+        .btn-cancel:hover {
+            background: #cbd5e0;
+            transform: translateY(-2px);
+            box-shadow: none;
+        }
+        
+        /* Event Cards - Dynamic Schedule */
+        .event-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: #fef2f2;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .event-card.red {
+            background: #fef2f2;
+        }
+        
+        .event-card .event-content {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex: 1;
+        }
+        
+        .event-card .event-time {
+            min-width: 80px;
+        }
+        
+        .event-card .event-time p {
+            color: #dc2626;
+            font-weight: 700;
+        }
+        
+        .event-card .event-details p:first-child {
+            font-weight: 600;
+            color: #1f2937;
+        }
+        
+        .event-card .event-details p:last-child {
+            font-size: 13px;
+            color: #6b7280;
+        }
+        
+        /* Event Admin Controls */
+        .event-admin-controls {
+            display: flex;
+            gap: 6px;
+            margin-left: 10px;
+        }
+        
+        .event-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .event-btn.move-up,
+        .event-btn.move-down {
+            background: #e0e7ff;
+            color: #4338ca;
+        }
+        
+        .event-btn.move-up:hover,
+        .event-btn.move-down:hover {
+            background: #c7d2fe;
+        }
+        
+        .event-btn.edit {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        
+        .event-btn.edit:hover {
+            background: #fde68a;
+        }
+        
+        .event-btn.delete {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .event-btn.delete:hover {
+            background: #fecaca;
+        }
+        
+        .event-btn.small {
+            width: 24px;
+            height: 24px;
+            font-size: 11px;
+        }
+        
+        /* Workshop Cards */
+        .workshop-card {
+            position: relative;
+        }
+        
+        .workshop-card p {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .workshop-admin-controls {
+            display: flex;
+            gap: 4px;
+        }
+        
+        /* Add Event Button */
+        .add-event-btn {
+            width: 100%;
+            padding: 12px;
+            border: 2px dashed #667eea;
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        .add-event-btn:hover {
+            background: rgba(102, 126, 234, 0.2);
+            border-color: #764ba2;
+        }
+        
+        .add-event-btn.small {
+            padding: 8px;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+        
+        /* Notification */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideIn 0.3s ease;
+        }
+        
+        .notification.success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+        
+        .notification.error {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+        
+        .notification.info {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        }
+        
+        .notification button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+            line-height: 1;
+        }
+        
+        .notification.fade-out {
+            animation: fadeOut 0.3s ease forwards;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes fadeOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hamburger {
+                display: flex;
+            }
+            
+            .mobile-menu {
+                display: flex;
+            }
+            
+            .building-label {
+                font-size: 9px;
+                padding: 3px 6px;
+            }
+            
+            .building-label .label-name {
+                font-size: 10px;
+            }
+            
+            .building-label .label-desc {
+                font-size: 8px;
+            }
+            
+            #qr-button {
+                top: auto;
+                bottom: 60px;
+                right: 10px;
+            }
+            
+            #controls-hint {
+                bottom: 10px;
+                font-size: 11px;
+                padding: 8px 12px;
+            }
+            
+            .event-card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .event-card .event-content {
+                width: 100%;
+            }
+            
+            .event-admin-controls {
+                margin-left: 0;
+                margin-top: 10px;
+                width: 100%;
+                justify-content: flex-end;
+            }
+            
+            .notification {
+                left: 20px;
+                right: 20px;
+                bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-brand">🎪 DJC Event</div>
+        
+        <!-- Desktop Navigation -->
+        <div class="nav-links">
+            <a class="nav-link" onclick="navigateTo('menu')">🍽️ DJC Menu</a>
+            <a class="nav-link" onclick="navigateTo('schedule')">📅 DJC Schedule</a>
+            <a class="nav-link active" onclick="navigateTo('venue')">🗺️ DJC Venue Map</a>
+            
+            <!-- Admin Button -->
+            <button id="admin-btn">🔐 Admin</button>
+            
+            <!-- Admin Controls (shown when logged in) -->
+            <div id="admin-controls">
+                <span class="admin-badge">✓ Admin Mode</span>
+                <button id="admin-logout-btn">Logout</button>
+            </div>
+        </div>
+        
+        <!-- Hamburger Menu Button -->
+        <div class="hamburger" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+    
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobile-menu">
+        <a class="nav-link" onclick="navigateTo('menu')">🍽️ DJC Menu</a>
+        <a class="nav-link" onclick="navigateTo('schedule')">📅 DJC Schedule</a>
+        <a class="nav-link active" onclick="navigateTo('venue')">🗺️ DJC Venue Map</a>
+        
+        <div class="mobile-admin-section">
+            <button id="admin-btn-mobile" onclick="document.getElementById('admin-btn').click()">🔐 Admin Login</button>
+        </div>
+    </div>
+    
+    <!-- Menu Section -->
+    <section id="menu-section" class="page-section">
+        <div class="p-6 max-w-4xl mx-auto">
+            <h1 class="text-3xl font-bold text-white mb-6">🍽️ DJC Menu</h1>
+            
+            <div class="content-card">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Food Court Options</h2>
+                <div class="space-y-4">
+                    <div class="border-b pb-3">
+                        <h3 class="font-semibold text-gray-700">🍕 Italian Corner</h3>
+                        <p class="text-gray-600 text-sm">Pizza, Pasta, Garlic Bread</p>
+                        <p class="text-purple-600 font-semibold">$8 - $15</p>
+                    </div>
+                    <div class="border-b pb-3">
+                        <h3 class="font-semibold text-gray-700">🍔 Burger Station</h3>
+                        <p class="text-gray-600 text-sm">Classic, Cheese, Veggie Burgers</p>
+                        <p class="text-purple-600 font-semibold">$10 - $14</p>
+                    </div>
+                    <div class="border-b pb-3">
+                        <h3 class="font-semibold text-gray-700">🍜 Asian Fusion</h3>
+                        <p class="text-gray-600 text-sm">Noodles, Fried Rice, Spring Rolls</p>
+                        <p class="text-purple-600 font-semibold">$9 - $16</p>
+                    </div>
+                    <div class="border-b pb-3">
+                        <h3 class="font-semibold text-gray-700">🥗 Fresh & Healthy</h3>
+                        <p class="text-gray-600 text-sm">Salads, Wraps, Smoothies</p>
+                        <p class="text-purple-600 font-semibold">$7 - $12</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-700">🍦 Desserts & Drinks</h3>
+                        <p class="text-gray-600 text-sm">Ice Cream, Coffee, Fresh Juices</p>
+                        <p class="text-purple-600 font-semibold">$3 - $8</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-card">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">🥤 Beverage Stands</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-blue-50 p-3 rounded-lg">
+                        <p class="font-semibold text-gray-700">☕ Coffee Bar</p>
+                        <p class="text-sm text-gray-600">Near Registration</p>
+                    </div>
+                    <div class="bg-green-50 p-3 rounded-lg">
+                        <p class="font-semibold text-gray-700">🧃 Juice Station</p>
+                        <p class="text-sm text-gray-600">Food Court</p>
+                    </div>
+                    <div class="bg-yellow-50 p-3 rounded-lg">
+                        <p class="font-semibold text-gray-700">🍺 Refreshments</p>
+                        <p class="text-sm text-gray-600">Near Main Stage</p>
+                    </div>
+                    <div class="bg-purple-50 p-3 rounded-lg">
+                        <p class="font-semibold text-gray-700">💧 Water Stations</p>
+                        <p class="text-sm text-gray-600">Throughout Venue</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Schedule Section - Dynamic Content -->
+    <section id="schedule-section" class="page-section">
+        <div class="p-6 max-w-4xl mx-auto">
+            <h1 class="text-3xl font-bold text-white mb-6">📅 DJC Schedule</h1>
+            
+            <div class="content-card">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">🎭 Main Stage</h2>
+                <div id="main-stage-events" class="space-y-2">
+                    <!-- Events will be dynamically rendered here -->
+                </div>
+            </div>
+            
+            <div class="content-card">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">🛠️ Workshop Zones</h2>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="font-semibold text-purple-600 mb-3">Zone A</h3>
+                        <div id="workshop-a-events" class="space-y-2 text-sm">
+                            <!-- Events will be dynamically rendered here -->
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-purple-600 mb-3">Zone B</h3>
+                        <div id="workshop-b-events" class="space-y-2 text-sm">
+                            <!-- Events will be dynamically rendered here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Venue Map Section (Default Active) -->
+    <section id="venue-section" class="page-section active">
+        <div id="canvas-container"></div>
+        
+        <!-- QR Button - Top Right -->
+        <button id="qr-button" class="btn" onclick="showQRCode()">
+            📱 Share QR Code
+        </button>
+        
+        <!-- Controls Hint -->
+        <div id="controls-hint">
+            🖱️ <strong>Rotate:</strong> Drag | <strong>Zoom:</strong> Scroll | <strong>Pan:</strong> Right-click
+        </div>
+        
+        <!-- Location Popup -->
+        <div id="location-popup"></div>
+    </section>
+    
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🔐 Admin Login</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="admin-login-form">
+                <div class="form-group">
+                    <label for="admin-id">Admin ID</label>
+                    <input type="text" id="admin-id" placeholder="Enter admin ID" required>
+                </div>
+                <div class="form-group">
+                    <label for="admin-password">Password</label>
+                    <input type="password" id="admin-password" placeholder="Enter password" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-cancel modal-close">Cancel</button>
+                    <button type="submit" class="btn">Login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Add Event Modal -->
+    <div id="add-event-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>➕ Add New Event</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="add-event-form">
+                <input type="hidden" id="add-event-category">
+                <div class="form-group">
+                    <label for="add-event-time">Time</label>
+                    <input type="text" id="add-event-time" placeholder="e.g., 10:00 AM" required>
+                </div>
+                <div class="form-group">
+                    <label for="add-event-title">Event Title</label>
+                    <input type="text" id="add-event-title" placeholder="Enter event title" required>
+                </div>
+                <div class="form-group">
+                    <label for="add-event-description">Description</label>
+                    <input type="text" id="add-event-description" placeholder="Brief description">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-cancel modal-close">Cancel</button>
+                    <button type="submit" class="btn">Add Event</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Edit Event Modal -->
+    <div id="edit-event-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>✏️ Edit Event</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="edit-event-form">
+                <input type="hidden" id="edit-event-category">
+                <input type="hidden" id="edit-event-id">
+                <div class="form-group">
+                    <label for="edit-event-time">Time</label>
+                    <input type="text" id="edit-event-time" placeholder="e.g., 10:00 AM" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-event-title">Event Title</label>
+                    <input type="text" id="edit-event-title" placeholder="Enter event title" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-event-description">Description</label>
+                    <input type="text" id="edit-event-description" placeholder="Brief description">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-cancel modal-close">Cancel</button>
+                    <button type="submit" class="btn">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+
+    <!-- Navigation Script -->
+    <script src="script.js"></script>
+
+    <!-- External Scripts -->
+    <script src="map.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>

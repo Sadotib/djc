@@ -71,6 +71,31 @@ const VENUE_CONFIG = {
             size: { width: 0, depth: 0 },
             name: 'Parking Area'
         },
+        
+        
+        // Decorative pond
+        // {
+        //     type: 'water',
+        //     position: { x: -30, z: -25 },
+        //     size: { width: 15, depth: 12 },
+        //     name: 'Reflection Pond'
+        // },
+        
+        // Stone plaza near entrance
+        // {
+        //     type: 'stone',
+        //     position: { x: 0, z: 25 },
+        //     size: { width: 20, depth: 10 },
+        //     name: 'Main Plaza'
+        // },
+        
+        // Sand area
+        // {
+        //     type: 'sand',
+        //     position: { x: 30, z: -25 },
+        //     size: { width: 12, depth: 12 },
+        //     name: 'Beach Zone'
+        // }
     ],
 
     // ┌────────────────────────────────────────────────────────────────────────┐
@@ -160,7 +185,7 @@ const VENUE_CONFIG = {
             size: { width: 20, height: 20, depth: 20 },
             color: 0xe6c317,
             name: 'Ladies Toilet and Washroom',
-            description: '1st Floor'
+            description: ''
         },
         {
             type: 'arch',
@@ -187,9 +212,32 @@ const VENUE_CONFIG = {
             description: 'Food Court'
         },
 
+
+
+        //    {
+        //     type: 'building',
+        //     position: { x: -5, z: 135 },
+        //     size: { width: 90, height: 20, depth: 70 },
+        //     color: 0xe74c3c,
+        //     name: 'Hostel V RockFord',
+        //     description: 'Live performances & keynotes'
+        // },
+
         // ══════════════════════════════════════════════════════════════════════
-        // SHRADHANJALI BOOTH
+        // EXHIBITION BOOTHS (Blue) - Auto-generated grid
+        // Creates 6 booths in a 2x3 grid pattern
         // ══════════════════════════════════════════════════════════════════════
+        // ...generateGrid({
+        //     type: 'building',
+        //     basePosition: { x: 5, z: -15 },
+        //     size: { width: 5, height: 4, depth: 6 },
+        //     color: 0x3498db,
+        //     rows: 2,
+        //     cols: 3,
+        //     spacing: { x: 7, z: 8 },
+        //     namePrefix: 'Booth',
+        //     description: 'Tech exhibitions & demos'
+        // }),
         {
             type: 'building',
             position: { x: -25, z: 35 },
@@ -200,8 +248,32 @@ const VENUE_CONFIG = {
         },
 
         // ══════════════════════════════════════════════════════════════════════
-        // SELFIE POINT
+        // FOOD COURT (Green)
         // ══════════════════════════════════════════════════════════════════════
+        // {
+        //     type: 'building',
+        //     position: { x: -15, z: 10 },
+        //     size: { width: 15, height: 5, depth: 12 },
+        //     color: 0x2ecc71,
+        //     name: 'Food Court',
+        //     description: 'Refreshments & dining area'
+        // },
+
+        // ══════════════════════════════════════════════════════════════════════
+        // FOOD STALLS (Dark Green) - Auto-generated row
+        // Creates 3 stalls in a horizontal line
+        // ══════════════════════════════════════════════════════════════════════
+        // ...generateRow({
+        //     type: 'building',
+        //     basePosition: { x: -12, z: 8 },
+        //     size: { width: 3, height: 3, depth: 3 },
+        //     color: 0x27ae60,
+        //     count: 3,
+        //     spacing: 5,
+        //     direction: 'x',    // 'x' = horizontal, 'z' = vertical
+        //     namePrefix: 'Food Stall',
+        //     description: 'Various cuisines'
+        // }),
         {
             type: 'building',
             position: { x: 15, z: 42 },
@@ -210,6 +282,26 @@ const VENUE_CONFIG = {
             name: 'Selfie Point',
             description: 'Photo Sessions'
         },
+
+        // ══════════════════════════════════════════════════════════════════════
+        // WORKSHOP ZONES (Purple)
+        // ══════════════════════════════════════════════════════════════════════
+        // {
+        //     type: 'building',
+        //     position: { x: 10, z: 10 },
+        //     size: { width: 10, height: 5, depth: 8 },
+        //     color: 0x9b59b6,
+        //     name: 'Workshop Zone A',
+        //     description: 'Hands-on sessions'
+        // },
+        // {
+        //     type: 'building',
+        //     position: { x: 22, z: 10 },
+        //     size: { width: 8, height: 5, depth: 8 },
+        //     color: 0x8e44ad,
+        //     name: 'Workshop Zone B',
+        //     description: 'Technical workshops'
+        // },
 
         // ══════════════════════════════════════════════════════════════════════
         // REGISTRATION & ENTRANCE (Orange)
@@ -254,6 +346,41 @@ const VENUE_CONFIG = {
             name: 'Gents Emergency Toilet',
             description: 'Facilities'
         },
+        // {
+        //     type: 'building',
+        //     position: { x: -25, z: 0 },
+        //     size: { width: 4, height: 3, depth: 5 },
+        //     color: 0x1abc9c,
+        //     name: 'Restrooms',
+        //     description: 'Facilities'
+        // }
+
+        // ══════════════════════════════════════════════════════════════════════
+        // ADD YOUR CUSTOM STRUCTURES BELOW
+        // Copy any block above and paste here, then modify values
+        // ══════════════════════════════════════════════════════════════════════
+        
+        // Example - Uncomment to add a VIP dome:
+        // ,{
+        //     type: 'dome',
+        //     position: { x: -25, z: -15 },
+        //     radius: 5,
+        //     color: 0xe84393,
+        //     name: 'VIP Lounge',
+        //     description: 'Exclusive VIP area'
+        // }
+
+        // Example - Uncomment to add an info tower:
+        // ,{
+        //     type: 'tower',
+        //     position: { x: 25, z: 15 },
+        //     radius: 2,
+        //     height: 10,
+        //     color: 0x00cec9,
+        //     name: 'Info Tower',
+        //     description: 'Event information'
+        // }
+
     ],
 
     // ┌────────────────────────────────────────────────────────────────────────┐
@@ -721,9 +848,10 @@ class VenueMap {
         const labelDiv = document.createElement('div');
         labelDiv.className = 'building-label';
         labelDiv.style.borderColor = `#${new THREE.Color(color).getHexString()}`;
+        labelDiv.style.background = `linear-gradient(135deg, rgba(0,0,0,0.85) 0%, rgba(${this.hexToRgb(color)},0.3) 100%)`;
         
         labelDiv.innerHTML = `
-            <span class="label-name" style="color: #${new THREE.Color(color).getHexString()}">${name}</span>
+            <span class="label-name">${name}</span>
             ${description ? `<span class="label-desc">${description}</span>` : ''}
         `;
         
@@ -1115,7 +1243,6 @@ class VenueMap {
         this.camera.aspect = width / height;
         this.camera.updateProjectionMatrix();
         this.renderer.setSize(width, height);
-        this.labelRenderer.setSize(width, height);
     }
 
     onMouseMove(event) {
@@ -1218,26 +1345,9 @@ function reinitializeMap() {
     }
 }
 
-// QR Code Functions
-function showQRCode() {
-    const modal = document.getElementById('qr-modal');
-    const qrContainer = document.getElementById('qr-code');
 
-    const url = window.location.href;
 
-    qrContainer.innerHTML = `
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}" 
-             alt="QR Code" 
-             style="border-radius: 10px;">
-        <p class="text-xs text-gray-500 mt-2">${url}</p>
-    `;
 
-    modal.classList.add('active');
-}
-
-function hideQRCode() {
-    document.getElementById('qr-modal').classList.remove('active');
-}
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', init);
