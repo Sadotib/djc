@@ -19,22 +19,20 @@ const ADMIN_CONFIG = {
  * Default schedule data structure
  */
 const DEFAULT_SCHEDULE = {
-    mainStage: [
-        { id: 'ms1', time: '9:00 AM', title: 'Opening Ceremony', description: 'Welcome & Keynote Address', order: 0 },
-        { id: 'ms2', time: '11:00 AM', title: 'Tech Talk: Future of AI', description: 'By Dr. Sarah Chen', order: 1 },
-        { id: 'ms3', time: '2:00 PM', title: 'Panel Discussion', description: 'Industry Leaders Q&A', order: 2 },
-        { id: 'ms4', time: '5:00 PM', title: 'Live Performance', description: 'Entertainment & Music', order: 3 }
-    ],
-    workshopA: [
-        { id: 'wa1', time: '10:00 AM', title: 'Web Dev Basics', description: 'HTML, CSS, JavaScript', order: 0 },
-        { id: 'wa2', time: '1:00 PM', title: 'React Masterclass', description: 'Advanced React patterns', order: 1 },
-        { id: 'wa3', time: '3:30 PM', title: 'API Design', description: 'RESTful best practices', order: 2 }
-    ],
-    workshopB: [
-        { id: 'wb1', time: '10:00 AM', title: 'Python for Data', description: 'Data analysis basics', order: 0 },
-        { id: 'wb2', time: '1:00 PM', title: 'ML Workshop', description: 'Machine learning intro', order: 1 },
-        { id: 'wb3', time: '3:30 PM', title: 'Cloud Deployment', description: 'AWS & Azure basics', order: 2 }
-    ]
+    '2026-01-31': {
+        mainStage: [
+            { id: 'ms1', time: '9:00 AM', title: 'Opening Ceremony', description: 'Welcome & Keynote Address', order: 0 },
+            { id: 'ms2', time: '11:00 AM', title: 'Tech Talk: Future of AI', description: 'By Dr. Sarah Chen', order: 1 },
+            { id: 'ms3', time: '2:00 PM', title: 'Panel Discussion', description: 'Industry Leaders Q&A', order: 2 },
+            { id: 'ms4', time: '5:00 PM', title: 'Live Performance', description: 'Entertainment & Music', order: 3 }
+        ]
+    },
+    '2026-02-01': {
+        mainStage: [
+            { id: 'ms5', time: '10:00 AM', title: 'Day 2 Keynote', description: 'Future of Technology', order: 0 },
+            { id: 'ms6', time: '1:00 PM', title: 'Networking Session', description: 'Meet industry leaders', order: 1 }
+        ]
+    }
 };
 
 /**
@@ -49,6 +47,8 @@ class AdminManager {
         this.scheduleData = null;
         this.broadcastChannel = null;
         this.draggedItem = null;
+        this.currentDate = '2026-01-31'; // Track selected date
+        this.pendingDeleteData = null; // Store pending deletion data
         
         this.init();
     }
@@ -63,14 +63,14 @@ class AdminManager {
         // Setup real-time sync via BroadcastChannel
         this.setupBroadcastChannel();
         
-        // Render the schedule
-        this.renderSchedule();
-        
         // Setup event listeners
         this.setupEventListeners();
         
-        // Check if already logged in (session)
+        // Check if already logged in (session) - DO THIS BEFORE RENDERING
         this.checkSession();
+        
+        // Render the schedule (now with correct isLoggedIn state)
+        this.renderSchedule();
     }
     
     /**
@@ -135,6 +135,11 @@ class AdminManager {
         if (session === 'active') {
             this.isLoggedIn = true;
             this.showAdminControls();
+            // Hide login modal if already logged in
+            const loginModal = document.getElementById('admin-login-modal');
+            if (loginModal) {
+                loginModal.classList.remove('active');
+            }
         }
     }
     
@@ -142,9 +147,6 @@ class AdminManager {
      * Setup event listeners
      */
     setupEventListeners() {
-        // Admin login button
-        document.getElementById('admin-btn')?.addEventListener('click', () => this.showLoginModal());
-        
         // Login form submit
         document.getElementById('admin-login-form')?.addEventListener('submit', (e) => this.handleLogin(e));
         
@@ -174,7 +176,7 @@ class AdminManager {
      * Show login modal
      */
     showLoginModal() {
-        document.getElementById('login-modal').classList.add('active');
+        document.getElementById('admin-login-modal').classList.add('active');
         document.getElementById('admin-id').focus();
     }
     
@@ -196,6 +198,14 @@ class AdminManager {
             
             // Re-render schedule with admin controls
             this.renderSchedule();
+            
+            // If on admin.html, don't redirect - stay on admin panel
+            // Only redirect if on index.html
+            if (!window.location.pathname.includes('admin.html')) {
+                setTimeout(() => {
+                    window.location.href = 'index.html#schedule';
+                }, 1500);
+            }
         } else {
             this.showNotification('Invalid credentials. Please try again.', 'error');
             document.getElementById('admin-password').value = '';
@@ -217,16 +227,20 @@ class AdminManager {
      * Show admin controls
      */
     showAdminControls() {
-        document.getElementById('admin-btn').style.display = 'none';
-        document.getElementById('admin-controls').style.display = 'flex';
+        const adminControls = document.getElementById('admin-controls');
+        if (adminControls) {
+            adminControls.style.display = 'block';
+        }
     }
     
     /**
      * Hide admin controls
      */
     hideAdminControls() {
-        document.getElementById('admin-btn').style.display = 'block';
-        document.getElementById('admin-controls').style.display = 'none';
+        const adminControls = document.getElementById('admin-controls');
+        if (adminControls) {
+            adminControls.style.display = 'none';
+        }
     }
     
     /**
@@ -261,17 +275,21 @@ class AdminManager {
         const category = document.getElementById('add-event-category').value;
         const time = document.getElementById('add-event-time').value;
         const title = document.getElementById('add-event-title').value;
-        const description = document.getElementById('add-event-description').value;
+        
+        // Ensure date structure exists
+        if (!this.scheduleData[this.currentDate]) {
+            this.scheduleData[this.currentDate] = { mainStage: [], workshopA: [], workshopB: [] };
+        }
         
         const newEvent = {
             id: 'evt_' + Date.now(),
             time,
             title,
-            description,
-            order: this.scheduleData[category].length
+            description: '',
+            order: this.scheduleData[this.currentDate][category].length
         };
         
-        this.scheduleData[category].push(newEvent);
+        this.scheduleData[this.currentDate][category].push(newEvent);
         this.saveToStorage();
         this.broadcastUpdate();
         this.renderSchedule();
@@ -283,14 +301,16 @@ class AdminManager {
      * Show edit event modal
      */
     showEditEventModal(category, eventId) {
-        const event = this.scheduleData[category].find(e => e.id === eventId);
+        const dateEvents = this.scheduleData[this.currentDate];
+        if (!dateEvents) return;
+        
+        const event = dateEvents[category].find(e => e.id === eventId);
         if (!event) return;
         
         document.getElementById('edit-event-category').value = category;
         document.getElementById('edit-event-id').value = eventId;
         document.getElementById('edit-event-time').value = event.time;
         document.getElementById('edit-event-title').value = event.title;
-        document.getElementById('edit-event-description').value = event.description;
         
         document.getElementById('edit-event-modal').classList.add('active');
     }
@@ -305,15 +325,16 @@ class AdminManager {
         const eventId = document.getElementById('edit-event-id').value;
         const time = document.getElementById('edit-event-time').value;
         const title = document.getElementById('edit-event-title').value;
-        const description = document.getElementById('edit-event-description').value;
         
-        const eventIndex = this.scheduleData[category].findIndex(e => e.id === eventId);
+        const dateEvents = this.scheduleData[this.currentDate];
+        if (!dateEvents) return;
+        
+        const eventIndex = dateEvents[category].findIndex(e => e.id === eventId);
         if (eventIndex !== -1) {
-            this.scheduleData[category][eventIndex] = {
-                ...this.scheduleData[category][eventIndex],
+            dateEvents[category][eventIndex] = {
+                ...dateEvents[category][eventIndex],
                 time,
-                title,
-                description
+                title
             };
             
             this.saveToStorage();
@@ -328,12 +349,27 @@ class AdminManager {
      * Delete an event
      */
     deleteEvent(category, eventId) {
-        if (!confirm('Are you sure you want to delete this event?')) return;
+        this.pendingDeleteData = { category, eventId };
+        const modal = document.getElementById('delete-confirm-modal');
+        if (modal) {
+            modal.classList.add('active');
+        }
+    }
+    
+    /**
+     * Confirm deletion from modal
+     */
+    confirmDelete() {
+        if (!this.pendingDeleteData) return;
         
-        this.scheduleData[category] = this.scheduleData[category].filter(e => e.id !== eventId);
+        const { category, eventId } = this.pendingDeleteData;
+        const dateEvents = this.scheduleData[this.currentDate];
+        if (!dateEvents) return;
+        
+        dateEvents[category] = dateEvents[category].filter(e => e.id !== eventId);
         
         // Reorder remaining events
-        this.scheduleData[category].forEach((event, index) => {
+        dateEvents[category].forEach((event, index) => {
             event.order = index;
         });
         
@@ -341,13 +377,28 @@ class AdminManager {
         this.broadcastUpdate();
         this.renderSchedule();
         this.showNotification('Event deleted successfully!', 'success');
+        this.cancelDelete();
+    }
+    
+    /**
+     * Cancel deletion
+     */
+    cancelDelete() {
+        this.pendingDeleteData = null;
+        const modal = document.getElementById('delete-confirm-modal');
+        if (modal) {
+            modal.classList.remove('active');
+        }
     }
     
     /**
      * Move event up or down
      */
     moveEvent(category, eventId, direction) {
-        const events = this.scheduleData[category];
+        const dateEvents = this.scheduleData[this.currentDate];
+        if (!dateEvents) return;
+        
+        const events = dateEvents[category];
         const index = events.findIndex(e => e.id === eventId);
         
         if (index === -1) return;
@@ -384,18 +435,27 @@ class AdminManager {
         const container = document.getElementById('main-stage-events');
         if (!container) return;
         
-        const events = [...this.scheduleData.mainStage].sort((a, b) => a.order - b.order);
+        // Get events for current date
+        const dateEvents = this.scheduleData[this.currentDate];
+        let html = '';
         
-        container.innerHTML = events.map(event => this.createEventCard(event, 'mainStage', 'red')).join('');
+        if (dateEvents && dateEvents.mainStage && dateEvents.mainStage.length > 0) {
+            const events = [...dateEvents.mainStage].sort((a, b) => a.order - b.order);
+            html = events.map(event => this.createEventCard(event, 'mainStage', 'red')).join('');
+        } else if (!this.isLoggedIn) {
+            html = '<p style="color: var(--color-grey); padding: var(--spacing-md);">No events scheduled for this date.</p>';
+        }
         
         // Add "Add Event" button if logged in
         if (this.isLoggedIn) {
-            container.innerHTML += `
+            html += `
                 <button class="add-event-btn" onclick="adminManager.showAddEventModal('mainStage')">
                     ➕ Add Event
                 </button>
             `;
         }
+        
+        container.innerHTML = html;
     }
     
     /**
@@ -405,9 +465,15 @@ class AdminManager {
         const containerA = document.getElementById('workshop-a-events');
         const containerB = document.getElementById('workshop-b-events');
         
+        const dateEvents = this.scheduleData[this.currentDate];
+        
         if (containerA) {
-            const eventsA = [...this.scheduleData.workshopA].sort((a, b) => a.order - b.order);
-            containerA.innerHTML = eventsA.map(event => this.createWorkshopCard(event, 'workshopA')).join('');
+            if (dateEvents && dateEvents.workshopA) {
+                const eventsA = [...dateEvents.workshopA].sort((a, b) => a.order - b.order);
+                containerA.innerHTML = eventsA.map(event => this.createWorkshopCard(event, 'workshopA')).join('');
+            } else {
+                containerA.innerHTML = '';
+            }
             
             if (this.isLoggedIn) {
                 containerA.innerHTML += `
@@ -419,8 +485,12 @@ class AdminManager {
         }
         
         if (containerB) {
-            const eventsB = [...this.scheduleData.workshopB].sort((a, b) => a.order - b.order);
-            containerB.innerHTML = eventsB.map(event => this.createWorkshopCard(event, 'workshopB')).join('');
+            if (dateEvents && dateEvents.workshopB) {
+                const eventsB = [...dateEvents.workshopB].sort((a, b) => a.order - b.order);
+                containerB.innerHTML = eventsB.map(event => this.createWorkshopCard(event, 'workshopB')).join('');
+            } else {
+                containerB.innerHTML = '';
+            }
             
             if (this.isLoggedIn) {
                 containerB.innerHTML += `
@@ -453,7 +523,6 @@ class AdminManager {
                     </div>
                     <div class="event-details">
                         <p class="font-semibold text-gray-800">${event.title}</p>
-                        <p class="text-sm text-gray-600">${event.description}</p>
                     </div>
                 </div>
                 ${adminButtons}
@@ -508,8 +577,37 @@ class AdminManager {
     }
 }
 
+/**
+ * Switch to a different date
+ */
+function switchDate(date) {
+    // Safety check - make sure adminManager exists
+    if (!adminManager || typeof adminManager !== 'object') {
+        console.warn('Admin manager not initialized yet');
+        return;
+    }
+    
+    adminManager.currentDate = date;
+    
+    // Update active tab - more precise matching
+    document.querySelectorAll('.date-tab').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    
+    // Add active class to the correct tab based on the date
+    document.querySelectorAll('.date-tab').forEach(tab => {
+        const text = tab.textContent.trim();
+        if ((date === '2026-01-31' && text === '31st Jan') || 
+            (date === '2026-02-01' && text === '1st Feb')) {
+            tab.classList.add('active');
+        }
+    });
+    
+    // Re-render schedule
+    adminManager.renderSchedule();
+}
+
 // Initialize admin manager when DOM is ready
-let adminManager;
 document.addEventListener('DOMContentLoaded', () => {
     adminManager = new AdminManager();
 });
