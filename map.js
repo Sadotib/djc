@@ -20,7 +20,8 @@ const VENUE_CONFIG = {
         groundColor: 0x5d4e37,        // Brown earth color
         groundSize: 500,              // Size of the ground (increase for larger venue)
         gridDivisions: 50,            // Grid lines on ground
-        showGrid: false               // Set to false to hide grid lines
+        showGrid: false,              // Set to false to hide grid lines
+        showGround: false             // Set to false to hide the brown ground base
     },
 
     // ┌────────────────────────────────────────────────────────────────────────┐
@@ -47,27 +48,27 @@ const VENUE_CONFIG = {
         // Main grass area
         {
             type: 'grass',
-            position: { x: 0, z: 0 },
-            size: { width: 400, depth: 400 },
+            position: { x: -35, z: -20 },
+            size: { width: 300, depth: 350 },
             name: 'Event Grounds'
         },
 
         // Parking Areas
-        {
-            type: 'grass',
-            position: { x: 110, z: 0 },
-            size: { width: 90, depth: 90 },
-            name: 'Parking Area'
-        },
+        // {
+        //     type: 'land',
+        //     position: { x: 85, z: -30 },
+        //     size: { width: 50, depth: 90 },
+        //     name: 'Parking Area'
+        // },
         {
             type: 'water',
-            position: { x: 55, z: 10 },
-            size: { width: 20, depth: 70 },
+            position: { x: 4, z: -40 },
+            size: { width: 30, depth: 70 },
             name: 'Anaconda',
         },
         {
-            type: 'grass',
-            position: { x: -80, z: 50 },
+            type: 'stone',
+            position: { x: -125, z: 0 },
             size: { width: 0, depth: 0 },
             name: 'Parking Area'
         },
@@ -94,61 +95,141 @@ const VENUE_CONFIG = {
         // ══════════════════════════════════════════════════════════════════════
         {
             type: 'building',
-            position: { x: 0, z: -5 },
-            size: { width: 30, height: 8, depth: 50 },
+            position: { x: 50, z: -50 },
+            size: { width: 50, height: 0.1, depth: 90 },
+            color: 0x8B7355,
+            name: 'Parking Area',
+            description: ''
+        },
+        {
+            type: 'building',
+            position: { x: -55, z: -150 },
+            size: { width: 35, height: 8, depth: 60 },
+            color: 0xFF0000,
+            name: '',
+            description: ''
+        },
+        {
+            type: 'building',
+            position: { x: -7, z: -150 },
+            size: { width: 35, height: 8, depth: 60 },
+            color: 0xFF0000,
+            name: 'Workshops',
+            description: ''
+        },
+        {
+            type: 'building',
+            position: { x: 41, z: -150 },
+            size: { width: 35, height: 8, depth: 60 },
+            color: 0xFF0000,
+            name: '',
+            description: ''
+        },
+        {
+            type: 'building',
+            position: { x: -45, z: -55 },
+            size: { width: 33, height: 10, depth: 55 },
             color: 0xe74c3c,
             name: 'Main Stage',
             description: 'Live performances & keynotes'
         },
         {
             type: 'building',
-            position: { x: 50, z: 90 },
+            position: { x: 5, z: 40 },
             size: { width: 90, height: 20, depth: 20 },
             color: 0xe6c317,
             name: 'Hostel-V VIP Block',
-            description: 'Live performances & keynotes'
+            description: ''
+        },
+        {
+            type: 'building',           //VIP TErrace
+            position: { x: 5, z: 40 },
+            size: { width: 94, height: 20.2, depth: 17 },
+            color: 0x808080,
+            name: '',
+            description: ''
         },
         {
             type: 'building',
-            position: { x: -5, z: 115 },
-            size: { width: 20, height: 20, depth: 70 },
+            position: { x: -50, z: 61 },
+            size: { width: 20, height: 20, depth: 62 },
             color: 0xe6c317,
             name: 'Hostel-V RockFord Block',
-            description: 'Live performances & keynotes'
+            description: ''
         },
         {
             type: 'building',
-            position: { x: 95, z: 115 },
-            size: { width: 20, height: 20, depth: 70 },
+            position: { x: -50, z: 40 },
+            size: { width: 20, height: 29, depth: 20 },
+            color: 0xe6c317,
+            name: '',
+            description: ''
+        },
+        {
+            type: 'building',
+            position: { x: 50, z: 40 },
+            size: { width: 20, height: 29, depth: 20 },
+            color: 0xe6c317,
+            name: '',
+            description: ''
+        },
+        {
+            type: 'building',
+            position: { x: -50, z: 61 },
+            size: { width: 18, height: 20.2, depth: 60 },
+            color: 0x808080,
+            name: '',
+            description: ''
+        },
+        {
+            type: 'building',
+            position: { x: 50, z: 61 },
+            size: { width: 20, height: 20, depth: 62 },
             color: 0xe6c317,
             name: 'Hostel-V DKB Block',
-            description: 'Live performances & keynotes'
+            description: ''
         },
         {
             type: 'building',
-            position: { x: 45, z: 155 },
+            position: { x: 50, z: 61 },
+            size: { width: 18, height: 20.2, depth: 60 },
+            color: 0x808080,
+            name: '',
+            description: ''
+        },
+        {
+            type: 'building',
+            position: { x: -75, z: 60 },
+            size: { width: 20, height: 0.5, depth: 40 },
+            color: 0x013220,
+            name: 'Volleyball Court',
+            description: ' '
+        },
+        {
+            type: 'building',
+            position: { x: 0, z: 105 },
             size: { width: 40, height: 10, depth: 20 },
             color: 0xe74c3c,
             name: 'Hostel V Mess',
-            description: 'Food Hall'
+            description: ''
         },
         // Extensions
         {
             type: 'building',
-            position: { x: 0, z: 154 },
+            position: { x: -45, z: 96 },
             size: { width: 10, height: 20, depth: 8 },
             color: 0xe6c317,
         },
         {
             type: 'building',
-            position: { x: 90, z: 154 },
+            position: { x: 45, z: 96 },
             size: { width: 10, height: 20, depth: 8 },
             color: 0xe6c317,
         },
         //
         {
             type: 'building',
-            position: { x: -5, z: 168 },
+            position: { x: -50, z: 110 },
             size: { width: 20, height: 20, depth: 20 },
             color: 0xe6c317,
             name: 'Bathrooms',
@@ -156,7 +237,7 @@ const VENUE_CONFIG = {
         },
         {
             type: 'building',
-            position: { x: 95, z: 168 },
+            position: { x: 50, z: 110 },
             size: { width: 20, height: 20, depth: 20 },
             color: 0xe6c317,
             name: 'Ladies Toilet and Washroom',
@@ -164,7 +245,7 @@ const VENUE_CONFIG = {
         },
         {
             type: 'arch',
-            position: { x: 0, z: 55 },
+            position: { x: -45, z: 5 },
             color: 0xf39c12,
             signColor: 0xe74c3c,
             description:'',
@@ -172,7 +253,7 @@ const VENUE_CONFIG = {
         },
         {
             type: 'arch',
-            position: { x: 100, z: 55 },
+            position: { x: 55, z: 5 },
             color: 0xf39c12,
             signColor: 0xe74c3c,
             description:'',
@@ -180,7 +261,7 @@ const VENUE_CONFIG = {
         },
         {
             type: 'building',
-            position: { x: 45, z: 120 },
+            position: { x: 0, z: 70 },
             size: { width: 70, height: 1, depth: 30 },
             color: 0x7CFC00,
             name: 'Hostel V Garden',
@@ -192,11 +273,11 @@ const VENUE_CONFIG = {
         // ══════════════════════════════════════════════════════════════════════
         {
             type: 'building',
-            position: { x: -25, z: 35 },
+            position: { x: -70, z: -15 },
             size: { width: 8, height: 4, depth: 8 },
             color: 0xe74c3c,
             name: 'Shradhanjali Booth',
-            description: 'Memories'
+            description: ''
         },
 
         // ══════════════════════════════════════════════════════════════════════
@@ -204,11 +285,11 @@ const VENUE_CONFIG = {
         // ══════════════════════════════════════════════════════════════════════
         {
             type: 'building',
-            position: { x: 15, z: 42 },
+            position: { x: -30, z: -8 },
             size: { width: 4, height: 4, depth: 4 },
             color: 0x2ecc71,
             name: 'Selfie Point',
-            description: 'Photo Sessions'
+            description: ''
         },
 
         // ══════════════════════════════════════════════════════════════════════
@@ -216,29 +297,29 @@ const VENUE_CONFIG = {
         // ══════════════════════════════════════════════════════════════════════
         {
             type: 'building',
-            position: { x: 25, z: 35 },
+            position: { x: -20, z: -15 },
             size: { width: 8, height: 4, depth: 8 },
             color: 0xf39c12,
             name: 'Registration',
-            description: 'Check-in '
+            description: ' '
         },
         {
             type: 'building',
-            position: { x: 25, z: 25 },
+            position: { x: -20, z: -25 },
             size: { width: 8, height: 4, depth: 8 },
             color: 0xf39c12,
-            name: 'Resting Area',
-            description: 'Info desk'
+            name: 'Resting Lounge',
+            description: ''
         },
         {
             type: 'arch',
-            position: { x: 0, z: 45 },
+            position: { x: -45, z: -5 },
             color: 0xf39c12,
             signColor: 0xe74c3c
         },
         {
             type: 'arch',
-            position: { x: -50, z: -70 },
+            position: { x: -95, z: -120 },
             color: 0xf39c12,
             signColor: 0xe74c3c
         },
@@ -248,11 +329,11 @@ const VENUE_CONFIG = {
         // ══════════════════════════════════════════════════════════════════════
         {
             type: 'building',
-            position: { x: 25, z: -35 },
+            position: { x: -20, z: -85 },
             size: { width: 4, height: 3, depth: 5 },
             color: 0x1abc9c,
             name: 'Gents Emergency Toilet',
-            description: 'Facilities'
+            description: ''
         },
     ],
 
@@ -262,24 +343,34 @@ const VENUE_CONFIG = {
     decorations: {
         // Trees - Add { x: value, z: value } to place a tree
         trees: [
-            { x: 40, z: 42 },
-            { x: -30, z: 42 },
-            { x: 25, z: 42 },
-            { x: 10, z: 42 },
-            { x: -35, z: 20 },
-            { x: -35, z: -20 },
-            { x: -10, z: 42 },
+            // { x: 30, z: 12 },
+            { x: -75, z: -8 },
+            { x: -20, z: -8 },
+            { x: -35, z: -8 },
+            { x: -80, z: -30 },
+            { x: -80, z: -70 },
+            { x: -55, z: -8 },
+            { x: 20, z: 75 },
+            { x: 28, z: 62 },
+            { x: 15, z: 60 },
+            { x: 8, z: 60 },
+            { x: -10, z: 60 },
+            { x: -20, z: 68 },
 
         ],
         
         // Paths - Connect two points with a walkway
         paths: [
-            { from: { x: -55, z: 50 }, to: { x: 170, z: 50 }, width: 10 },
-            { from: { x: -50, z: 200 }, to: { x: -50, z: -150 }, width: 10 },
-            { from: { x: -5, z: 140 }, to: { x: 85, z: 140 }, width: 6 },
-            { from: { x: 0, z: 55 }, to: { x: 0, z: 80 }, width: 5 },
-            { from: { x: 100, z: 55 }, to: { x: 100, z: 80 }, width: 5 },
-            { from: { x: -55, z: 50 }, to: { x: -100, z: 50 }, width: 10 },
+            { from: { x: -100, z: 0 }, to: { x: 115, z: 0 }, width: 10 },
+            
+            { from: { x: 90, z: 0 }, to: { x: 90, z: 150 }, width: 10 },
+            { from: { x: -100, z: -100 }, to: { x: 25, z: -100 }, width: 10 },
+            { from: { x: -95, z: 150 }, to: { x: -95, z: -190 }, width: 10 },
+            { from: { x: -50, z: 90 }, to: { x: 40, z: 90 }, width: 6 },
+            { from: { x: -45, z: 5 }, to: { x: -45, z: 30 }, width: 5 },
+            { from: { x: 55, z: 5 }, to: { x: 55, z: 30 }, width: 5 },
+            { from: { x: -100, z: 0 }, to: { x: -145, z: 0 }, width: 10 },
+            { from: { x: -100, z: 0 }, to: { x: -145, z: 0 }, width: 10 },
         ]
     }
 };
@@ -503,23 +594,26 @@ class VenueMap {
      * Create ground plane and grid
      */
     createGround() {
-        const { groundColor, groundSize, gridDivisions, showGrid } = this.config.scene;
+        const { groundColor, groundSize, gridDivisions, showGrid, showGround } = this.config.scene;
 
-        // Ground plane
-        const groundGeo = new THREE.PlaneGeometry(groundSize, groundSize);
-        const groundMat = new THREE.MeshStandardMaterial({
-            color: groundColor,
-            roughness: 0.8
-        });
-        const ground = new THREE.Mesh(groundGeo, groundMat);
-        ground.rotation.x = -Math.PI / 2;
-        ground.receiveShadow = true;
-        this.scene.add(ground);
+        // Ground plane - positioned below terrain to avoid z-fighting
+        if (showGround !== false) {
+            const groundGeo = new THREE.PlaneGeometry(groundSize, groundSize);
+            const groundMat = new THREE.MeshStandardMaterial({
+                color: groundColor,
+                roughness: 0.8
+            });
+            const ground = new THREE.Mesh(groundGeo, groundMat);
+            ground.rotation.x = -Math.PI / 2;
+            ground.position.y = -0.1; // Positioned below to prevent flickering
+            ground.receiveShadow = true;
+            this.scene.add(ground);
+        }
 
         // Grid helper (optional)
         if (showGrid !== false) {
             const grid = new THREE.GridHelper(groundSize, gridDivisions, 0x444444, 0x333333);
-            grid.position.y = 0.01;
+            grid.position.y = 0.001; // Just slightly above ground
             this.scene.add(grid);
         }
     }
@@ -545,7 +639,7 @@ class VenueMap {
                     this.createTerrainPatch(terrain, 0xf4e4ba, 0.95); // Sandy color
                     break;
                 case 'stone':
-                    this.createTerrainPatch(terrain, 0x808080, 0.7); // Gray stone
+                    this.createTerrainPatch(terrain, 0x808080, 0.85); // Gray stone
                     break;
                 default:
                     console.warn(`Unknown terrain type: ${terrain.type}`);
@@ -567,7 +661,7 @@ class VenueMap {
         });
         const mesh = new THREE.Mesh(geo, mat);
         mesh.rotation.x = -Math.PI / 2;
-        mesh.position.y = 0.02;
+        mesh.position.y = 0.05; // Positioned clearly above the brown base to prevent z-fighting
         mesh.receiveShadow = true;
         group.add(mesh);
 
@@ -587,7 +681,7 @@ class VenueMap {
     /**
      * Create water body with animated effect
      */
-    createWater({ position, size, name }) {
+    createWater({ position, size, name}) {
         const group = new THREE.Group();
 
         // Water base
@@ -786,7 +880,7 @@ class VenueMap {
     /**
      * Create an entrance arch with label
      */
-    createArch({ position, color, signColor, name = 'Entrance', description = 'Main Entry' }) {
+    createArch({ position, color, signColor, name = 'Ground Entrance', description = '' }) {
         const group = new THREE.Group();
         const pillarMat = new THREE.MeshStandardMaterial({ color });
 
