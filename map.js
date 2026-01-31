@@ -103,24 +103,40 @@ const VENUE_CONFIG = {
         },
         {
             type: 'building',
-            position: { x: -55, z: -150 },
-            size: { width: 35, height: 8, depth: 60 },
+            position: { x: -65, z: -150 },
+            size: { width: 25, height: 8, depth: 50 },
             color: 0xFF0000,
             name: '',
             description: ''
         },
         {
             type: 'building',
-            position: { x: -7, z: -150 },
-            size: { width: 35, height: 8, depth: 60 },
+            position: { x: -35, z: -150 },
+            size: { width: 25, height: 8, depth: 50 },
+            color: 0xFF0000,
+            name: '',
+            description: ''
+        },
+        {
+            type: 'building',
+            position: { x: -5, z: -150 },
+            size: { width: 25, height: 8, depth: 50 },
             color: 0xFF0000,
             name: 'Workshops',
             description: ''
         },
         {
             type: 'building',
-            position: { x: 41, z: -150 },
-            size: { width: 35, height: 8, depth: 60 },
+            position: { x: 25, z: -150 },
+            size: { width: 25, height: 8, depth: 50 },
+            color: 0xFF0000,
+            name: '',
+            description: ''
+        },
+        {
+            type: 'building',
+            position: { x: 55, z: -150 },
+            size: { width: 25, height: 8, depth: 50 },
             color: 0xFF0000,
             name: '',
             description: ''
@@ -209,7 +225,7 @@ const VENUE_CONFIG = {
             type: 'building',
             position: { x: 0, z: 105 },
             size: { width: 40, height: 10, depth: 20 },
-            color: 0xe74c3c,
+            color: 0xFF0000,
             name: 'Hostel V Mess',
             description: ''
         },
@@ -259,6 +275,75 @@ const VENUE_CONFIG = {
             description:'',
             name: '2nd Gate'
         },
+
+        // ══════════════════════════════════════════════════════════════════════
+        // H-V PATTERN (Dark Green - Between Gates)
+        // ══════════════════════════════════════════════════════════════════════
+        // V - Left vertical (flipped with x-axis as pivot)
+        {
+            type: 'building',
+            position: { x: -18, z:16 },
+            size: { width: 3, height: 0.1, depth: 7 },
+            color: 0xffffff,
+            name: '',
+            description: ''
+        },
+        // V - Middle connector (flipped with x-axis as pivot)
+        {
+            type: 'building',
+            position: { x: -15, z: 11 },
+            size: { width: 6, height: 0.1, depth: 2 },
+            color: 0xffffff,
+            name: '',
+            description: ''
+        },
+        // V - Right vertical (flipped with x-axis as pivot)
+        {
+            type: 'building',
+            position: { x: -12, z: 16 },
+            size: { width: 3, height: 0.1, depth: 7 },
+            color: 0xffffff,
+            name: '',
+            description: ''
+        },
+        // Dash - Horizontal line between V and H
+        {
+            type: 'building',
+            position: { x: -5, z: 15 },
+            size: { width: 6, height: 0.1, depth: 2 },
+            color: 0xffffff,
+            name: '',
+            description: ''
+        },
+        // H - Left vertical (now on positive x side, right from Anaconda's view)
+        {
+            type: 'building',
+            position: { x: 2, z: 15 },
+            size: { width: 3, height: 0.1, depth: 10 },
+            color: 0xffffff,
+            name: '',
+            description: ''
+        },
+        // H - Right vertical (now on positive x side)
+        {
+            type: 'building',
+            position: { x: 8, z: 15 },
+            size: { width: 3, height: 0.1, depth: 10 },
+            color: 0xffffff,
+            name: '',
+            description: ''
+        },
+        // H - Horizontal connector (now on positive x side)
+        {
+            type: 'building',
+            position: { x: 5, z: 15 },
+            size: { width: 6, height: 0.1, depth: 2 },
+            color: 0xffffff,
+            name: '',
+            description: ''
+        },
+        
+
         {
             type: 'building',
             position: { x: 0, z: 70 },
@@ -300,7 +385,7 @@ const VENUE_CONFIG = {
             position: { x: -20, z: -15 },
             size: { width: 8, height: 4, depth: 8 },
             color: 0xf39c12,
-            name: 'Registration',
+            name: 'Resting Lounge',
             description: ' '
         },
         {
@@ -308,7 +393,7 @@ const VENUE_CONFIG = {
             position: { x: -20, z: -25 },
             size: { width: 8, height: 4, depth: 8 },
             color: 0xf39c12,
-            name: 'Resting Lounge',
+            name: 'Registration',
             description: ''
         },
         {
